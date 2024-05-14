@@ -3,6 +3,7 @@ package com.learning.trainservice.controller;
 import com.learning.trainservice.dto.request.TrainSearchRequest;
 import com.learning.trainservice.dto.response.ResponseDto;
 import com.learning.trainservice.dto.request.NewTrainRequest;
+import com.learning.trainservice.dto.response.TrainSearchResponseDto;
 import com.learning.trainservice.service.TrainService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -26,8 +27,12 @@ public class TrainController {
                 .body(new ResponseDto("201", "Train added successfully"));
     }
 
-//    @GetMapping("/search-trains")
-//    public ResponseEntity<> getTrainsBetweenTwoStations(@Valid @RequestBody TrainSearchRequest request) {
-//
-//    }
+    @GetMapping("/search-trains")
+    public ResponseEntity<TrainSearchResponseDto> getTrainsBetweenTwoStations(@Valid @RequestBody TrainSearchRequest request) {
+        TrainSearchResponseDto trainSearchResponseDto = trainService.getAllTrainsBetweenTwoStationsOnDate(request);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(trainSearchResponseDto);
+    }
 }
