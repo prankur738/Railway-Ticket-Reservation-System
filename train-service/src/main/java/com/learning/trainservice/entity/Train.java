@@ -4,17 +4,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import utils.enums.Day;
+import lombok.*;
 
 import java.time.LocalTime;
-import java.util.List;
 
 @Entity
 @Getter @Setter
 @Builder
+@NoArgsConstructor @AllArgsConstructor
 public class Train {
 
     @Id
