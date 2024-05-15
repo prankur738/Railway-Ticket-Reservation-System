@@ -11,11 +11,15 @@ import com.learning.trainservice.exception.DuplicateEntityException;
 import com.learning.trainservice.exception.ResourceNotFoundException;
 import com.learning.trainservice.mapper.TrainMapper;
 import com.learning.trainservice.repository.StationRepository;
+import com.learning.trainservice.repository.TrainFrequencyRepository;
 import com.learning.trainservice.repository.TrainRepository;
 import com.learning.trainservice.repository.TrainScheduleRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
+import java.time.DayOfWeek;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -27,6 +31,7 @@ public class TrainService {
     private TrainRepository trainRepository;
     private StationRepository stationRepository;
     private TrainScheduleRepository trainScheduleRepository;
+    private TrainFrequencyRepository trainFrequencyRepository;
 
     public void addNewTrain(NewTrainRequest request) {
         Optional<Train> existingTrain = trainRepository.findByTrainNumber(request.getTrainNumber());
@@ -45,8 +50,6 @@ public class TrainService {
     }
 
     public TrainSearchResponseDto getAllTrainsBetweenTwoStationsOnDate(TrainSearchRequest request) {
-        List<TrainDataDto> trainDtos = trainScheduleRepository.findTrainBetweenTwoStations(request.getFromStation(), request.getToStation());
-
         Station departureStation = stationRepository.findByStationCode(request.getFromStation()).orElseThrow(
                 () -> new ResourceNotFoundException(request.getFromStation() + ": This station code doesn't exist.")
         );
@@ -54,15 +57,24 @@ public class TrainService {
                 () -> new ResourceNotFoundException(request.getToStation() + ": This station code doesn't exist.")
         );
 
+        //Storing numeric value of day on departureDate Mon->0, Tue->1, etc.
+        Integer departureDayOfWeek = request.getDepartureDate().getDayOfWeek().getValue() -1 ;
 
-        List<TrainResponseDto> trains = trainDtos.stream()
+        /** First, fetching trains running between the departure and arrival stations, then filter them based on their operation on the departure day */
+        List<TrainDataDto> trainDataDtos = trainScheduleRepository.findTrainBetweenTwoStations(request.getFromStation(), request.getToStation())
+                .stream()
+                .filter(trainDataDto -> {
+                    /** Filtering trains based on whether they operate/run on the day of departure */
+                    Boolean isRunning = trainFrequencyRepository.findIsRunningByTrainNumberAndDayOfWeek(trainDataDto.getTrainNumber(), departureDayOfWeek, trainDataDto.getDepartureDay());
+                    return !ObjectUtils.isEmpty(isRunning) && isRunning;
+                })
+                .toList();
+
+        /**mapping the eligible-trains-data to response DTOs */
+        List<TrainResponseDto> trains = trainDataDtos.stream()
                 .map(trainDataDto -> {
                     String trainName = trainRepository.findByTrainNumber(trainDataDto.getTrainNumber()).get().getTrainName();
-                    return TrainResponseDto.from(
-                            trainDataDto,
-                            trainName,
-                            request.getDepartureDate()
-                    );
+                    return TrainResponseDto.from(trainDataDto, trainName, request.getDepartureDate());
                 })
                 .toList();
 
