@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import java.time.LocalTime;
 @Data @NoArgsConstructor
 @AllArgsConstructor
+/** Please maintain the field order as it defines the parameters for the
+ * AllArgsConstructor used in TrainScheduleRepository.*/
 public class TrainDataDto {
     private String trainNumber;
     private LocalTime departureTime;

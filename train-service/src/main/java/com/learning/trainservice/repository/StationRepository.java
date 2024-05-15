@@ -8,6 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface StationRepository extends JpaRepository<Station, Long> {
-
     Optional<Station> findByStationCode(String stationCode);
 }
