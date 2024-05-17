@@ -12,7 +12,8 @@ import java.util.Date;
 @Entity
 @Table(name = "booking")
 public class Booking extends BaseModel {
-    // User to be added
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Column(name = "booking_status")
     @Enumerated(EnumType.STRING)
