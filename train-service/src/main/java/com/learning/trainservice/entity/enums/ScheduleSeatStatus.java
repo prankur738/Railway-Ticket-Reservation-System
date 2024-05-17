@@ -1,6 +1,6 @@
 package com.learning.trainservice.entity.enums;
 
-public enum SeatStatus {
+public enum ScheduleSeatStatus {
     AVAILABLE,
     UNAVAILABLE,
     BOOKED,

@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "booking")
 public class Booking extends BaseModel {
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
