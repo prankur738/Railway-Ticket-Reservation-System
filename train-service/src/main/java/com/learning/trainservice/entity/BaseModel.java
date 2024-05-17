@@ -9,7 +9,7 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -28,7 +28,7 @@ public class BaseModel {
     @CreatedDate
     @Temporal(value = TemporalType.TIMESTAMP)
     @Column(name = "created_at")
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
     @LastModifiedBy
     @Column(name = "last_modified_by")
@@ -37,5 +37,5 @@ public class BaseModel {
     @LastModifiedDate
     @Temporal(value = TemporalType.TIMESTAMP)
     @Column(name = "last_modified_at")
-    private Date lastModifiedAt;
+    private LocalDateTime lastModifiedAt;
 }

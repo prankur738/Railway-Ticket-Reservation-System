@@ -19,6 +19,7 @@ public class PNR extends BaseModel {
     @Column(name = "seat_id")
     private Long seatId;
 
-    @Column(name = "pnr_status") // it will show waiting list number
+    /** It will show waiting list number. */
+    @Column(name = "pnr_status")
     private Integer pnrStatus;
 }

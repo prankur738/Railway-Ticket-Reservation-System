@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -20,7 +20,7 @@ public class Booking extends BaseModel {
     private BookingStatus bookingStatus;
 
     @Column(name = "booked_at")
-    private Date bookedAt;
+    private LocalDateTime bookedAt;
 
     @Column(name = "amount")
     private int amount;
