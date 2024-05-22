@@ -12,6 +12,7 @@ public interface TrainScheduleRepository extends JpaRepository<TrainSchedule, Lo
             "t1.trainNumber, " +
             "t1.departureTime, t1.day, " +
             "t2.arrivalTime, t2.day, " +
+            "t2.distanceFromOrigin-t1.distanceFromOrigin, " +
             ":stationId1, " +
             ":stationId2) " +
             "FROM TrainSchedule t1 " +

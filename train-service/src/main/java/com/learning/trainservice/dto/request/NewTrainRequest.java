@@ -1,11 +1,12 @@
 package com.learning.trainservice.dto.request;
 
 import jakarta.validation.constraints.*;
-import lombok.Getter;
+import lombok.*;
 
 import java.time.LocalTime;
 
-@Getter
+@Getter @Builder @Setter
+@AllArgsConstructor @NoArgsConstructor
 public class NewTrainRequest {
 
     @Pattern(regexp="\\d{5}", message="Train number must be 5 digits")

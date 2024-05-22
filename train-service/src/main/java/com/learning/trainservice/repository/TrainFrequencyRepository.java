@@ -10,8 +10,14 @@ public interface TrainFrequencyRepository extends JpaRepository<TrainFrequency, 
     @Query("SELECT tf.isRunning FROM TrainFrequency tf " +
             "WHERE tf.trainNumber = :trainNumber AND " +
             ":departureDayOfWeek = ( (tf.dayOfWeek + :trainDay - 1) % 7 )")
+    Boolean findIsRunningByTrainNumberAndDepartureDayAndTrainDay(@Param("trainNumber") String trainNumber,
+                                                                 @Param("departureDayOfWeek") Integer departureDayOfWeek,
+                                                                 @Param("trainDay") Integer trainDay);
+
+    @Query("SELECT tf.isRunning FROM TrainFrequency tf " +
+            "WHERE tf.trainNumber = :trainNumber AND " +
+            "tf.dayOfWeek = :departureDayOfWeek")
     Boolean findIsRunningByTrainNumberAndDayOfWeek(@Param("trainNumber") String trainNumber,
-                                                   @Param("departureDayOfWeek") Integer departureDayOfWeek,
-                                                   @Param("trainDay") Integer trainDay);
+                                                   @Param("departureDayOfWeek") Integer dayOfWeek);
 }
 

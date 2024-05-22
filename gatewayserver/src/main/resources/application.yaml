@@ -1,0 +1,7 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: train-service-route
+          uri: ${TRAIN-SERVICE_ROUTE_URI:http://localhost:8081}
+
