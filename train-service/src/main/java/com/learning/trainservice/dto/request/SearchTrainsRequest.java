@@ -6,7 +6,7 @@ import lombok.Data;
 import java.time.LocalDate;
 
 @Data
-public class TrainSearchRequest {
+public class SearchTrainsRequest {
     @Pattern(regexp="[A-Z]{2,4}", message="Invalid station-code format")
     private String fromStation;
 

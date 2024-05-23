@@ -1,9 +1,9 @@
 package com.learning.trainservice.controller;
 
-import com.learning.trainservice.dto.request.TrainSearchRequest;
+import com.learning.trainservice.dto.request.SearchTrainsRequest;
 import com.learning.trainservice.dto.response.ResponseDto;
 import com.learning.trainservice.dto.request.NewTrainRequest;
-import com.learning.trainservice.dto.response.TrainSearchResponseDto;
+import com.learning.trainservice.dto.response.SearchTrainsResponseDto;
 import com.learning.trainservice.service.TrainService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -27,12 +27,16 @@ public class TrainController {
                 .body(new ResponseDto("201", "Train added successfully"));
     }
 
+    /**
+     * This api is fetching trains running between the stations on departureDate
+     * along with their available ac and sleeper seats
+     */
     @GetMapping("/search-trains")
-    public ResponseEntity<TrainSearchResponseDto> getTrainsBetweenTwoStations(@Valid @RequestBody TrainSearchRequest request) {
-        TrainSearchResponseDto trainSearchResponseDto = trainService.getAllTrainsBetweenTwoStationsOnDate(request);
+    public ResponseEntity<SearchTrainsResponseDto> getTrainsBetweenTwoStations(@Valid @RequestBody SearchTrainsRequest request) {
+        SearchTrainsResponseDto searchTrainsResponseDto = trainService.getAllTrainsBetweenTwoStationsOnDate(request);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(trainSearchResponseDto);
+                .body(searchTrainsResponseDto);
     }
 }
