@@ -8,7 +8,8 @@ import com.learning.trainservice.dto.response.TrainResponseDto;
 import com.learning.trainservice.dto.response.SearchTrainsResponseDto;
 import com.learning.trainservice.entity.Station;
 import com.learning.trainservice.entity.Train;
-import com.learning.trainservice.enums.BookingStatus;
+import com.learning.trainservice.enums.DayOfWeekEnum;
+import com.learning.trainservice.enums.SeatBookingStatus;
 import com.learning.trainservice.enums.SeatType;
 import com.learning.trainservice.exception.DuplicateEntityException;
 import com.learning.trainservice.exception.ResourceNotFoundException;
@@ -19,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
@@ -59,8 +61,9 @@ public class TrainService {
                 () -> new ResourceNotFoundException(request.getToStation() + ": This station code doesn't exist.")
         );
 
+        DayOfWeek departureDayOfWeek = request.getDepartureDate().getDayOfWeek();
         //Storing numeric value of day on departureDate Mon->0, Tue->1, etc.
-        Integer passengerDepartureDayOfWeek = request.getDepartureDate().getDayOfWeek().getValue() -1 ;
+        Integer passengerDepartureDayOfWeek = DayOfWeekEnum.fromDayOfWeek(departureDayOfWeek).getDayNumber();
 
         /** First, fetching trains running between the departure and arrival stations, then filter them based on their operation on the departure day */
         List<TrainDataDto> trainDataDtos = trainScheduleRepository.findTrainBetweenTwoStations(request.getFromStation(), request.getToStation())
@@ -91,9 +94,10 @@ public class TrainService {
                         int daysToSubtract = trainDataDto.getDepartureTrainDay() - 1;
                         LocalDate trainStartDate = request.getDepartureDate().minusDays(daysToSubtract);
 
-                        List<SeatDataDto> availableAcSeats = seatBookingRepository.findSeatsByTrainNumberAndTrainStartDateAndSeatTypeAndBookingStatus(trainNumber, trainStartDate, SeatType.AC, BookingStatus.NOT_BOOKED);
-                        List<SeatDataDto> availableSleeperSeats = seatBookingRepository.findSeatsByTrainNumberAndTrainStartDateAndSeatTypeAndBookingStatus(trainNumber, trainStartDate, SeatType.SLEEPER, BookingStatus.NOT_BOOKED);
+                        List<SeatDataDto> availableAcSeats = seatBookingRepository.findSeatsByTrainNumberAndTrainStartDateAndSeatTypeAndBookingStatus(trainNumber, trainStartDate, SeatType.AC, SeatBookingStatus.NOT_BOOKED);
+                        List<SeatDataDto> availableSleeperSeats = seatBookingRepository.findSeatsByTrainNumberAndTrainStartDateAndSeatTypeAndBookingStatus(trainNumber, trainStartDate, SeatType.SLEEPER, SeatBookingStatus.NOT_BOOKED);
 
+                        trainResponseDto.setTrainStartDate(trainStartDate);
                         trainResponseDto.setAvailableAcSeats(availableAcSeats);
                         trainResponseDto.setAvailableSleeperSeats(availableSleeperSeats);
                     } catch (Exception e) {
@@ -114,6 +118,7 @@ public class TrainService {
                 .toStationCode(arrivalStation.getStationCode())
                 .toStationName(arrivalStation.getStationName())
                 .departureDate(request.getDepartureDate())
+                .departureDay(departureDayOfWeek)
                 .trains(trains)
                 .build();
     }

@@ -10,8 +10,8 @@ import java.util.List;
 public interface TrainScheduleRepository extends JpaRepository<TrainSchedule, Long> {
     @Query("SELECT new com.learning.trainservice.dto.TrainDataDto(" +
             "t1.trainNumber, " +
-            "t1.departureTime, t1.day, " +
-            "t2.arrivalTime, t2.day, " +
+            "t1.departureTime, t1.trainDay, " +
+            "t2.arrivalTime, t2.trainDay, " +
             "t2.distanceFromOrigin-t1.distanceFromOrigin, " +
             ":stationId1, " +
             ":stationId2) " +

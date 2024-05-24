@@ -3,21 +3,19 @@ package com.learning.trainservice.scheduler;
 import com.learning.trainservice.entity.Seat;
 import com.learning.trainservice.entity.SeatBooking;
 import com.learning.trainservice.entity.Train;
-import com.learning.trainservice.enums.BookingStatus;
+import com.learning.trainservice.enums.SeatBookingStatus;
 import com.learning.trainservice.repository.SeatBookingRepository;
 import com.learning.trainservice.repository.SeatRepository;
 import com.learning.trainservice.repository.TrainFrequencyRepository;
 import com.learning.trainservice.repository.TrainRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -64,7 +62,7 @@ public class ScheduledTasks {
                             .seatType(seat.getSeatType())
                             .trainNumber(trainNumber)
                             .trainStartDate(trainStartDate)
-                            .bookingStatus(BookingStatus.NOT_BOOKED)
+                            .seatBookingStatus(SeatBookingStatus.NOT_BOOKED)
                             .build())
                     .toList();
 
