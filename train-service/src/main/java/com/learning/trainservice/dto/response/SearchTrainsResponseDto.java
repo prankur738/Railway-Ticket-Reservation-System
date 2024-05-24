@@ -3,6 +3,7 @@ package com.learning.trainservice.dto.response;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -17,5 +18,6 @@ public class SearchTrainsResponseDto {
     private String toStationCode;
     private String toStationName;
     private LocalDate departureDate;
+    private DayOfWeek departureDay;
     private List<TrainResponseDto> trains;
 }

@@ -25,6 +25,7 @@ public class TrainResponseDto {
     private String arrivalStationCode;
     private LocalDateTime arrivalTime;
     private Integer journeyDistanceInKms;
+    private LocalDate trainStartDate;
 
     private Float sleeperSeatFare;
     private Float acSeatFare;
